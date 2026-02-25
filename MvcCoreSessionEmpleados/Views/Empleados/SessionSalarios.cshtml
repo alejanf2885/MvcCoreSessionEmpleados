@@ -1,0 +1,48 @@
+﻿@model List<Empleado>
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h2 class="mb-0">Sesión Salarios Empleados</h2>
+        </div>
+
+        <div class="card-body">
+
+            <div class="text-center mb-4">
+                <a asp-controller="Empleados"
+                   asp-action="SumaSalarial"
+                   class="btn btn-success btn-lg">
+                    Mostrar Suma Salarial
+                </a>
+            </div>
+
+            @if (ViewData["MENSAJE"] != null)
+            {
+                <div class="alert alert-info text-center">
+                    <strong>@ViewData["MENSAJE"]</strong>
+                </div>
+            }
+
+            <ul class="list-group">
+                @foreach (Empleado empleado in Model)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="fw-semibold">
+                            @empleado.Apellido
+                        </span>
+
+                        <a asp-controller="Empleados"
+                           asp-action="SessionSalarios"
+                           asp-route-salario="@empleado.Salario"
+                           class="btn btn-outline-primary btn-sm">
+                            Almacenar salario
+                        </a>
+                    </li>
+                }
+            </ul>
+
+        </div>
+    </div>
+
+</div>

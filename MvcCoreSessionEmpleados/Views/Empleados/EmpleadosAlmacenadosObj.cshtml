@@ -1,0 +1,75 @@
+﻿@model List<Empleado>
+
+<h1 class="text-center mb-4">Empleados Almacenados IDS</h1>
+
+<p class="text-center">
+    <a asp-controller="Empleados"
+       asp-action="SessionEmpleadosObj"
+       class="btn btn-sm btn-secondary">
+        Volver a empleados IDS
+    </a>
+</p>
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg">
+
+        <div class="card-header text-white text-center" style="background-color: #0d6efd;">
+            <h2 class="mb-0">Empleados Almacenados en Sesión</h2>
+        </div>
+
+        <div class="card-body">
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped align-middle text-center">
+
+                        <thead style="background-color: #6c757d; color: #fff;">
+                            <tr>
+                                <th>Id</th>
+                                <th>Apellido</th>
+                                <th>Oficio</th>
+                                <th>Salario</th>
+                                <th>Id Departamento</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.IdEmpleado</td>
+                                    <td>@item.Apellido</td>
+                                    <td>@item.Oficio</td>
+                                    <td class="fw-semibold text-success">
+                                        @item.Salario €
+                                    </td>
+                                    <td>@item.IdDepartamento</td>
+                                    <td>
+                                        <a asp-action="Delete"
+                                           asp-route-id="@item.IdEmpleado"
+                                           class="btn btn-sm btn-outline-danger">
+                                            Eliminar
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning text-center">
+                    No hay empleados almacenados en sesión.
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

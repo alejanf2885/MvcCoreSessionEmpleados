@@ -1,0 +1,43 @@
+﻿<div class="container mt-5">
+
+    <div class="card shadow-lg">
+
+        <div class="card-header bg-primary text-white text-center">
+            <h2 class="mb-0">Suma Salarial Sesión</h2>
+        </div>
+
+        <div class="card-body text-center">
+
+            <div class="mb-4">
+                <a asp-controller="Empleados"
+                   asp-action="SessionSalarios"
+                   class="btn btn-outline-secondary">
+                    ← Volver a salarios empleados
+                </a>
+            </div>
+
+            @if (Context.Session.GetString("SUMASALARIAL") != null)
+            {
+                <div class="alert alert-success">
+                    <h4 class="mb-0">
+                        Suma salarial:
+                        <span class="fw-bold text-primary">
+                            @Context.Session.GetString("SUMASALARIAL") €
+                        </span>
+                    </h4>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <h5 class="mb-0">
+                        No tiene salarios almacenados en sesión
+                    </h5>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

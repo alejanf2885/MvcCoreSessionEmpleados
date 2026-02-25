@@ -1,0 +1,66 @@
+﻿@model List<Empleado>
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+
+        @* Header: Verde Bosque Profundo *@
+        <div class="card-header" style="background-color:#1b4332; color:white; text-align:center;">
+            <h2 class="mb-0">Session Empleados IDS</h2>
+        </div>
+
+        <div class="card-body" style="background-color: #fdfdfd;">
+
+            <div class="text-center mb-4">
+                <a asp-controller="Empleados"
+                   asp-action="EmpleadosAlmacenadosObj"
+                   class="btn shadow-sm"
+                   style="background-color:#40916c; color:white; font-weight: 500;">
+                    Ver Empleados Almacenados IDS
+                </a>
+            </div>
+
+            @if (ViewData["MENSAJE"] != null)
+            {
+                @* Alerta: Tono menta suave *@
+                <div class="alert text-center border-0" style="background-color:#d8f3dc; color:#1b4332;">
+                    <strong>@ViewData["MENSAJE"]</strong>
+                </div>
+            }
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="row">
+                    @foreach (Empleado empleado in Model)
+                    {
+                        <div class="col-md-4 mb-4">
+                            <div class="card border-0 shadow-sm h-100" style="background-color:#f8f9fa;">
+                                <div class="card-body text-center">
+                                    @* Texto: Verde oscuro *@
+                                    <h5 class="card-title fw-bold" style="color:#2d6a4f;">
+                                        @empleado.Apellido
+                                    </h5>
+                                    <p class="text-muted mb-3 small">
+                                        ID: @empleado.IdEmpleado
+                                    </p>
+                                    <a asp-controller="Empleados"
+                                       asp-action="SessionEmpleadosObj"
+                                       asp-route-idempleado="@empleado.IdEmpleado"
+                                       class="btn w-100 shadow-sm"
+                                       style="background-color:#52b788; color:white;">
+                                        Almacenar empleado
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert" style="background-color:#fefae0; color:#bc6c25; text-align:center;">
+                    No hay empleados disponibles.
+                </div>
+            }
+        </div>
+    </div>
+</div>

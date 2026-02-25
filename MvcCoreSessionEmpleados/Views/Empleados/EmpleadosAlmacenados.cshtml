@@ -1,0 +1,76 @@
+﻿@{
+    List<Empleado> empleados = Context.Session.GetObject<List<Empleado>>("EMPLEADOS");
+}
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg">
+
+        <div class="card-header bg-primary text-white text-center">
+            <h2 class="mb-0">Empleados Almacenados en Sesión</h2>
+        </div>
+
+        <div class="card-body">
+
+            @if (empleados != null && empleados.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped align-middle text-center">
+
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Id</th>
+                                <th>Apellido</th>
+                                <th>Oficio</th>
+                                <th>Salario</th>
+                                <th>Id Departamento</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in empleados)
+                            {
+                                <tr>
+                                    <td>@item.IdEmpleado</td>
+                                    <td>@item.Apellido</td>
+                                    <td>@item.Oficio</td>
+                                    <td class="fw-semibold text-success">
+                                        @item.Salario €
+                                    </td>
+                                    <td>@item.IdDepartamento</td>
+                                    <td>
+                                        <a asp-action="Delete"
+                                           asp-route-id="@item.IdEmpleado"
+                                           class="btn btn-sm btn-outline-danger">
+                                            Eliminar
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning text-center">
+                    No hay empleados almacenados en sesión.
+                </div>
+            }
+
+            <!-- BOTÓN CENTRADO -->
+            <div class="text-center mt-4">
+                <a asp-controller="Empleados"
+                   asp-action="SessionEmpleados"
+                   class="btn btn-outline-secondary px-4">
+                    ← Volver a empleados
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

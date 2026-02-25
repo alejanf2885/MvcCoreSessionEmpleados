@@ -1,0 +1,71 @@
+﻿@model List<Empleado>
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg">
+
+        <div class="card-header bg-primary text-white text-center">
+            <h2 class="mb-0">Session Empleados</h2>
+        </div>
+
+        <div class="card-body">
+
+            <div class="text-center mb-4">
+                <a asp-controller="Empleados"
+                   asp-action="EmpleadosAlmacenados"
+                   class="btn btn-success">
+                    Ver Empleados Almacenados
+                </a>
+            </div>
+
+            @if (ViewData["MENSAJE"] != null)
+            {
+                <div class="alert alert-info text-center">
+                    <strong>@ViewData["MENSAJE"]</strong>
+                </div>
+            }
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="row">
+                    @foreach (Empleado empleado in Model)
+                    {
+                        <div class="col-md-4 mb-4">
+                            <div class="card border-0 shadow-sm h-100">
+
+                                <div class="card-body text-center">
+
+                                    <h5 class="card-title fw-bold">
+                                        @empleado.Apellido
+                                    </h5>
+
+                                    <p class="text-muted mb-3">
+                                        ID: @empleado.IdEmpleado
+                                    </p>
+
+                                    <a asp-controller="Empleados"
+                                       asp-action="SessionEmpleados"
+                                       asp-route-idempleado="@empleado.IdEmpleado"
+                                       class="btn btn-outline-primary btn-sm w-100">
+                                        Almacenar empleado
+                                    </a>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning text-center">
+                    No hay empleados disponibles.
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
