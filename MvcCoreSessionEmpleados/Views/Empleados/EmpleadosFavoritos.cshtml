@@ -1,0 +1,64 @@
+﻿@{
+    List<Empleado> empleadosFavoritos =
+    this.memoryCache.Get<List<Empleado>>("FAVORITOS");
+}
+
+
+<h1>Empleados favoritos</h1>
+<a asp-controller="Empleados"
+   asp-action="Index">
+    Volver a dashboard
+</a>
+
+
+@if (empleadosFavoritos != null && empleadosFavoritos.Any())
+{
+    <div class="table-responsive">
+        <table class="table align-middle text-center"
+               style="color:#ffffff;">
+
+            <thead style="background-color:#222222; color:#ffffff;">
+                <tr>
+                    <th>Id</th>
+                    <th>Apellido</th>
+                    <th>Oficio</th>
+                    <th>Salario</th>
+                    <th>Id Departamento</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in empleadosFavoritos)
+                {
+                    <tr style="background-color:#1f1f1f; border-bottom:1px solid #333;">
+                        <td>@item.IdEmpleado</td>
+                        <td>@item.Apellido</td>
+                        <td>@item.Oficio</td>
+                        <td style="color:#4caf50; font-weight:600;">
+                            @item.Salario €
+                        </td>
+                        <td>@item.IdDepartamento</td>
+                        <td>
+                            <a asp-controller="Empleados"
+                               asp-action="EmpleadosAlmacenadosV5"
+                               asp-route-ideliminar="@item.IdEmpleado"
+                               class="btn btn-sm"
+                               style="background-color:#000000; color:#ff4d4d; border:1px solid #444;">
+                                Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert text-center border-0"
+         style="background-color:#2a2a2a; color:#cccccc;">
+        No hay empleados favoritos
+    </div>
+}

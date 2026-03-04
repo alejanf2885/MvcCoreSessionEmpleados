@@ -1,0 +1,81 @@
+﻿@model List<Empleado>
+
+<h1 class="text-center mb-4" style="color:#ffffff;">Empleados Almacenados IDS</h1>
+
+<p class="text-center">
+    <a asp-controller="Empleados"
+       asp-action="SessionEmpleadosV5"
+       class="btn btn-sm shadow-sm"
+       style="background-color:#2b2b2b; color:#ffffff; border:1px solid #444;">
+        Volver a empleados V5
+    </a>
+</p>
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg border-0" style="background-color:#111111;">
+
+        <div class="card-header text-center"
+             style="background-color:#000000; color:#ffffff; border-bottom:1px solid #222;">
+            <h2 class="mb-0">Empleados Almacenados en Sesión</h2>
+        </div>
+
+        <div class="card-body" style="background-color:#1a1a1a; color:#e0e0e0;">
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table align-middle text-center"
+                           style="color:#ffffff;">
+
+                        <thead style="background-color:#222222; color:#ffffff;">
+                            <tr>
+                                <th>Id</th>
+                                <th>Apellido</th>
+                                <th>Oficio</th>
+                                <th>Salario</th>
+                                <th>Id Departamento</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr style="background-color:#1f1f1f; border-bottom:1px solid #333;">
+                                    <td>@item.IdEmpleado</td>
+                                    <td>@item.Apellido</td>
+                                    <td>@item.Oficio</td>
+                                    <td style="color:#4caf50; font-weight:600;">
+                                        @item.Salario €
+                                    </td>
+                                    <td>@item.IdDepartamento</td>
+                                    <td>
+                                        <a asp-controller="Empleados"
+                                            asp-action="EmpleadosAlmacenadosV5"
+                                           asp-route-ideliminar="@item.IdEmpleado"
+                                           class="btn btn-sm"
+                                           style="background-color:#000000; color:#ff4d4d; border:1px solid #444;">
+                                            Eliminar
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert text-center border-0"
+                     style="background-color:#2a2a2a; color:#cccccc;">
+                    No hay empleados almacenados en sesión.
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

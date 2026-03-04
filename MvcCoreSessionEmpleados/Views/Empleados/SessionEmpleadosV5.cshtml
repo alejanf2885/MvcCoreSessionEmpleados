@@ -1,0 +1,130 @@
+﻿@model List<Empleado>
+
+
+@{
+    //Necesitamos session en la vista para comprobar sus datos
+
+    List<int> ids =
+        Context.Session.GetObject<List<int>>("IDSEMPLEADOS");
+    List<Empleado> empleadosFavoritos =
+        this.memoryCache.Get<List<Empleado>>("FAVORITOS");
+
+
+
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0" style="background-color:#111111;">
+
+        @* Header: Negro profundo *@
+        <div class="card-header" style="background-color:#000000; color:#ffffff; text-align:center; border-bottom:1px solid #222;">
+            <h2 class="mb-0">Session Empleados V5</h2>
+        </div>
+
+        @if (ids != null)
+        {
+            <div class="card-header" style="background-color:#000000; color:#ffffff; text-align:center; border-bottom:1px solid #222;">
+                <h3>Empleados en Session: @ids.Count</h3>
+            </div>
+        }
+        else
+        {
+            <div class="card-header" style="background-color:#000000; color:#ffffff; text-align:center; border-bottom:1px solid #222;">
+                <h3>Empleados en Session: 0</h3>
+            </div>
+        }
+        @if (empleadosFavoritos != null)
+        {
+            <div class="card-header" style="background-color:#000000; color:#ffffff; text-align:center; border-bottom:1px solid #222;">
+                <h3>Empleados Favoritos en Cache: @empleadosFavoritos.Count</h3>
+            </div>
+        }
+        else
+        {
+            <div class="card-header" style="background-color:#000000; color:#ffffff; text-align:center; border-bottom:1px solid #222;">
+                <h3>Empleados Favoritos en Cache: 0</h3>
+            </div>
+        }
+
+        <div class="card-body" style="background-color:#1a1a1a; color:#e0e0e0;">
+
+            <div class="text-center mb-4">
+                <a asp-controller="Empleados"
+                   asp-action="EmpleadosAlmacenadosV5"
+                   class="btn shadow-sm"
+                   style="background-color:#2b2b2b; color:#ffffff; font-weight:500; border:1px solid #444;">
+                    Ver Empleados Almacenados IDS
+                </a>
+            </div>
+
+            @if (ViewData["MENSAJE"] != null)
+            {
+                @* Alerta: Gris oscuro elegante *@
+                <div class="alert text-center border-0" style="background-color:#222; color:#ffffff;">
+                    <strong>@ViewData["MENSAJE"]</strong>
+                </div>
+            }
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="row">
+                    @foreach (Empleado empleado in Model)
+                    {
+                        <div class="col-md-4 mb-4">
+                            <div class="card border-0 shadow-sm h-100" style="background-color:#262626; border:1px solid #333;">
+                                <div class="card-body text-center">
+                                    @* Texto blanco/gris claro *@
+                                    <h5 class="card-title fw-bold" style="color:#ffffff;">
+                                        @empleado.Apellido
+                                    </h5>
+                                    <p class="text-muted mb-3 small" style="color:#bfbfbf !important;">
+                                        ID: @empleado.IdEmpleado
+                                    </p>
+                                    <a asp-controller="Empleados"
+                                       asp-action="SessionEmpleadosV5"
+                                       asp-route-idfavorito="@empleado.IdEmpleado">
+                                        Favorito
+                                    </a>
+                                    @if (ids == null)
+                                    {
+                                        <a asp-controller="Empleados"
+                                           asp-action="SessionEmpleadosV5"
+                                           asp-route-idempleado="@empleado.IdEmpleado"
+                                           class="btn w-100 shadow-sm"
+                                           style="background-color:#000000; color:#ffffff; border:1px solid #444;">
+                                            Almacenar empleado
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        if (ids.Contains(empleado.IdEmpleado))
+                                        {
+                                            <img src="~/images/ok.png"
+                                                 style="width: 40px; height:40px;" />
+                                        }
+                                        else
+                                        {
+                                            <a asp-controller="Empleados"
+                                               asp-action="SessionEmpleadosV5"
+                                               asp-route-idempleado="@empleado.IdEmpleado"
+                                               class="btn w-100 shadow-sm"
+                                               style="background-color:#000000; color:#ffffff; border:1px solid #444;">
+                                                Almacenar empleado
+                                            </a>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert text-center border-0" style="background-color:#2a2a2a; color:#cccccc;">
+                    No hay empleados disponibles.
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -4,12 +4,15 @@ using MvcCoreSessionEmpleados.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddMemoryCache();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//Session
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession();
+
 
 builder.Services.AddTransient<IRepositoryEmpleados, RepositoryEmpleados>();
 

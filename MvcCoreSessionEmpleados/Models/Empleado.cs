@@ -16,13 +16,13 @@ namespace MvcCoreSessionEmpleados.Models
         public string Apellido { get; set; }
 
         [Column("OFICIO")]
-        public string Oficio { get; set; }
+        public string? Oficio { get; set; }
 
         [Column("SALARIO")]
-        public int Salario { get; set; }
+        public int? Salario { get; set; }
 
         [Column("DEPT_NO")]
-        public int IdDepartamento { get; set; }
+        public int? IdDepartamento { get; set; }
 
     }
 }

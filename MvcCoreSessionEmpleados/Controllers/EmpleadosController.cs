@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using MvcCoreSessionEmpleados.Extensions;
 using MvcCoreSessionEmpleados.Models;
 using MvcCoreSessionEmpleados.Repositories;
@@ -11,10 +12,12 @@ namespace MvcCoreSessionEmpleados.Controllers
     {
 
         private IRepositoryEmpleados repo;
+        private IMemoryCache cache;
 
-        public EmpleadosController(IRepositoryEmpleados repo)
+        public EmpleadosController(IRepositoryEmpleados repo, IMemoryCache cache)
         {
             this.repo = repo;
+            this.cache = cache;
         }
 
         public IActionResult Index()
@@ -206,6 +209,100 @@ namespace MvcCoreSessionEmpleados.Controllers
 
 
             return View();
+        }
+
+
+        public async Task<IActionResult> SessionEmpleadosV5
+           (int? idempleado, int? idfavorito)
+        {
+
+            if(idfavorito != null)
+            {
+                List<Empleado> empleadosFavoritos;
+                if(this.cache.Get("FAVORITOS") == null)
+                {
+                    empleadosFavoritos = new List<Empleado>();
+                }
+                else
+                {
+                    empleadosFavoritos =
+                        this.cache.Get<List<Empleado>>("FAVORITOS");
+                }
+                Empleado empleadoFavorito =
+                    await this.repo.FindEmpleadoAsync(idfavorito.Value);
+                empleadosFavoritos.Add(empleadoFavorito);
+                this.cache.Set("FAVORITOS", empleadosFavoritos);
+            }
+
+
+            if (idempleado != null)
+            {
+                List<int> idsEmpleadosList;
+                if (HttpContext.Session.GetObject<List<int>>
+                    ("IDSEMPLEADOS") != null)
+                {
+                    //RECUPERAMOS LA COLECCION
+                    idsEmpleadosList =
+                        HttpContext.Session.GetObject<List<int>>("IDSEMPLEADOS");
+                }
+                else
+                {
+                    //CREAMOS LA COLECCION
+                    idsEmpleadosList = new List<int>();
+                }
+                //ALMACENAMOS EL ID DEL EMPLEADO
+                idsEmpleadosList.Add(idempleado.Value);
+                //ALMACENAMOS EN SESSION LOS DATOS
+                HttpContext.Session.SetObject("IDSEMPLEADOS", idsEmpleadosList);
+                ViewData["MENSAJE"] = "Empleados almacenados: "
+                    + idsEmpleadosList.Count;
+            }
+            List<Empleado> empleados = await this.repo.GetEmpleadosAsync();
+            return View(empleados);
+           
+        }
+
+
+
+
+        public async Task<IActionResult> EmpleadosAlmacenadosV5(int? ideliminar)
+        {
+            //RECUPERAMOS LA COLECCION DE SESSION
+            List<int> idsEmpleados =
+                HttpContext.Session.GetObject<List<int>>("IDSEMPLEADOS");
+            if (idsEmpleados == null)
+            {
+                ViewData["MENSAJE"] = "No existen empleados en Session";
+                return View();
+            }
+            else
+            {
+
+                if(ideliminar != null)
+                {
+                    idsEmpleados.Remove(ideliminar.Value);
+                    if(idsEmpleados.Count() == 0)
+                    {
+                        HttpContext.Session.Remove("IDSEMPLEADOS");
+
+                    }
+                    else
+                    {
+                        HttpContext.Session.SetObject("IDSEMPLEADOS", idsEmpleados);
+
+                    }
+                }
+
+                List<Empleado> empleados =
+                    await this.repo.GetEmpleadosSession(idsEmpleados);
+                return View(empleados);
+            }
+        }
+
+        public IActionResult EmpleadosFavoritos()
+        {
+            return View();
+            
         }
     }
 }
