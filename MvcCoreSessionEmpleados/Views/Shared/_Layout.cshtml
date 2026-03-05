@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@{
+    List<int> ids =
+     Context.Session.GetObject<List<int>>("IDSEMPLEADOS");
+    List<Empleado> empleadosFavoritos =
+        this.memoryCache.Get<List<Empleado>>("FAVORITOS");
+
+
+}
+
+
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -22,6 +34,24 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Empleados" asp-action="Index">Salarios</a>
+                        </li>
+                        <li class="nav-item">
+                            @if(ids != null)
+                            {
+                                <h6>Compras: @ids.Count</h6>
+                            }
+                            else
+                            {
+                                <h6>Compras: 0</h6>
+                            }
+                            @if (empleadosFavoritos != null)
+                            {
+                                <h6>Favoritos: @empleadosFavoritos.Count</h6>
+                            }
+                            else
+                            {
+                                <h6>Favoritos: 0</h6>
+                            }
                         </li>
                     </ul>
                 </div>

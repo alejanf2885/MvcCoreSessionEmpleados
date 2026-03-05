@@ -80,11 +80,31 @@
                                     <p class="text-muted mb-3 small" style="color:#bfbfbf !important;">
                                         ID: @empleado.IdEmpleado
                                     </p>
-                                    <a asp-controller="Empleados"
-                                       asp-action="SessionEmpleadosV5"
-                                       asp-route-idfavorito="@empleado.IdEmpleado">
-                                        Favorito
-                                    </a>
+                                    @if(empleadosFavoritos == null)
+                                    {
+                                        <a asp-controller="Empleados"
+                                           asp-action="SessionEmpleadosV5"
+                                           asp-route-idfavorito="@empleado.IdEmpleado">
+                                            Favorito
+                                        </a>
+                                    }
+                                    else if(empleadosFavoritos.Any(z => z.IdEmpleado == empleado.IdEmpleado))
+                                    {
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="green" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Empleados"
+                                           asp-action="SessionEmpleadosV5"
+                                           asp-route-idfavorito="@empleado.IdEmpleado">
+                                            Favorito
+                                        </a>
+                                    }
+
+
+
                                     @if (ids == null)
                                     {
                                         <a asp-controller="Empleados"
